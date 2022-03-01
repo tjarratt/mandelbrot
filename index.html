@@ -1,0 +1,53 @@
+<html>
+  <head>
+    <script src=https://cdnjs.cloudflare.com/ajax/libs/mathjs/10.1.1/math.js></script>
+    <script type=application/javascript>
+        function mandelbrot(x, y) {
+            let c = math.complex(x, y);
+            var z = c;
+            for (let i = 0; i < 10; i++) {
+                if (math.abs(z) > 2) {
+                    return false;
+                }
+
+                z = math.multiply(z.pow(2), c);
+            } 
+
+            return true;
+        }
+
+        function draw() {
+            let canvas = document.getElementsByTagName("canvas")[0];
+            let context = canvas.getContext('2d');
+    
+            let origin_x = canvas.width / 2.0;
+            let origin_y = canvas.height / 2.0;
+            let min_x = -3.0;
+            let min_y = -3.0;
+            let max_x = 3.0;
+            let max_y = 3.0;
+            console.log("the origin is at", origin_x, origin_y);
+            for (let i = 0; i < canvas.width; i ++) {
+                for (let j = 0; j < canvas.height; j++) {
+                    let x = i * max_x / canvas.width;
+                    let y = j * max_y / canvas.height;
+
+                    if (mandelbrot(x, y)) {
+                        context.fillStyle = 'rgb(0, 0, 0)';
+                    } else {
+                        context.fillStyle = 'rgb(255, 255, 255)'; 
+                    }
+                    
+                    context.fillRect(i, j, 1, 1);
+                }
+            }
+        }
+    </script>
+  </head>
+
+  <body onload=draw();>
+    <h1>Hello, Mandelbrot !</h1>
+    <canvas width=100 height=100 />
+  </body>
+
+</html>
