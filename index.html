@@ -35,7 +35,7 @@
                     let val = mandelbrot(x, y);
                     let hue = parseInt(255.0 * val / max_iterations);
                     let saturation = '100%';
-                    let value = val < max_iterations ? '50%' : '20%';
+                    let value = val < max_iterations ? '50%' : '0%';
                     context.fillStyle = `hsl(${hue}, ${saturation}, ${value})`;
                     context.fillRect(i, j, 1, 1);
                 }
