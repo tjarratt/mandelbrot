@@ -2,6 +2,18 @@
   <head>
     <script src=https://cdnjs.cloudflare.com/ajax/libs/mathjs/10.1.1/math.js></script>
     <script type=application/javascript>
+        const TODO = [
+            "full height / width canvas",
+            "upon iterations keep note of which points can be skipped -- pure black",
+            "delay re-rendering points upon iterations which are pure red",
+            "research ways to speed up rendering within a single iteration",
+            "pan support",
+            "zoom support",
+            "full-bleed canvas -- css reset-ish",
+        ];
+        TODO.forEach(item => console.log("TODO :", item));
+    </script>
+    <script type=application/javascript>
         let max_iterations = 10;
 
         function mandelbrot(x, y) {
