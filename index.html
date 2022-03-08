@@ -9,7 +9,6 @@
             "research ways to speed up rendering within a single iteration",
             "pan support",
             "zoom support",
-            "full-bleed canvas -- css reset-ish",
         ];
         TODO.forEach(item => console.log("TODO :", item));
     </script>
@@ -62,14 +61,14 @@
         function init() {
             console.log("init");
             let canvas = document.getElementsByTagName("canvas")[0];
-            canvas.width = window.screen.width / 2;
+            canvas.width = window.screen.width;
             canvas.height = canvas.width * 2 / 3;
             draw();
         }
     </script>
   </head>
 
-  <body onload=init();>
+  <body onload=init(); style=margin:0px>
     <canvas width=600 height=400 />
   </body>
 
