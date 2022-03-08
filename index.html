@@ -2,7 +2,7 @@
   <head>
     <script src=https://cdnjs.cloudflare.com/ajax/libs/mathjs/10.1.1/math.js></script>
     <script type=application/javascript>
-        let max_iterations = 80;
+        let max_iterations = 10;
 
         function mandelbrot(x, y) {
             let z = math.complex(0, 0);
@@ -17,8 +17,9 @@
         }
 
         function draw() {
+            console.log("drawing at resolution", max_iterations);
             let canvas = document.getElementsByTagName("canvas")[0];
-            let context = canvas.getContext('2d');
+            let context = canvas.getContext('2d', {alpha: false});
     
             let origin_x = canvas.width / 2.0;
             let origin_y = canvas.height / 2.0;
@@ -40,12 +41,23 @@
                     context.fillRect(i, j, 1, 1);
                 }
             }
+
+            if (max_iterations >= 80) return;
+            max_iterations *= 2;
+            setTimeout(draw, 10);
+        }
+
+        function init() {
+            console.log("init");
+            let canvas = document.getElementsByTagName("canvas")[0];
+            canvas.width = window.screen.width / 2;
+            canvas.height = canvas.width * 2 / 3;
+            draw();
         }
     </script>
   </head>
 
-  <body onload=draw();>
-    <h1>Hello, Mandelbrot !</h1>
+  <body onload=init();>
     <canvas width=600 height=400 />
   </body>
 
