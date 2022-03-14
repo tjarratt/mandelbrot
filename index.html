@@ -3,32 +3,30 @@
     <script src=https://cdnjs.cloudflare.com/ajax/libs/mathjs/10.1.1/math.js></script>
     <script type=application/javascript>
         const TODO = [
-            "full height / width canvas",
-            "upon iterations keep note of which points can be skipped -- pure black",
-            "delay re-rendering points upon iterations which are pure red",
-            "research ways to speed up rendering within a single iteration",
-            "pan support",
             "zoom support",
+            "pan support",
+            "research ways to speed up rendering within a single iteration",
         ];
         TODO.forEach(item => console.log("TODO :", item));
     </script>
     <script type=application/javascript>
-        let max_iterations = 10;
+        let max_iterations = 20;
+        let zoom_factor = 1.0;
 
-        function mandelbrot(x, y) {
+        function mandelbrot(c) {
             let z = math.complex(0, 0);
             let n = 0;
-            let c = math.complex(x, y);
             while (math.abs(z) <= 2 && n < max_iterations) {
                 z = math.add(z.pow(2), c);
                 n += 1;
             }
 
+
             return n;
         }
 
         function draw() {
-            console.log("drawing at resolution", max_iterations);
+            console.time("draw");
             let canvas = document.getElementsByTagName("canvas")[0];
             let context = canvas.getContext('2d', {alpha: false});
     
@@ -41,10 +39,11 @@
 
             for (let i = 0; i < canvas.width; i ++) {
                 for (let j = 0; j < canvas.height; j++) {
-                    let x = min_x + (i / canvas.width) * (max_x - min_x);
-                    let y = min_y + (j / canvas.height) * (max_y - min_y);
+                    let x = min_x + (i / canvas.width) * (max_x - min_x) * zoom_factor;
+                    let y = min_y + (j / canvas.height) * (max_y - min_y) * zoom_factor;
+                    let c = math.complex(x, y);
+                    let val = mandelbrot(c);
 
-                    let val = mandelbrot(x, y);
                     let hue = parseInt(255.0 * val / max_iterations);
                     let saturation = '100%';
                     let value = val < max_iterations ? '50%' : '0%';
@@ -53,7 +52,9 @@
                 }
             }
 
-            if (max_iterations >= 80) return;
+            console.timeEnd("draw");
+            if (max_iterations >= 80) { console.log("DONE"); return; }
+
             max_iterations *= 2;
             setTimeout(draw, 10);
         }
@@ -63,7 +64,22 @@
             let canvas = document.getElementsByTagName("canvas")[0];
             canvas.width = window.screen.width;
             canvas.height = canvas.width * 2 / 3;
-            draw();
+
+            setTimeout(draw, 10);
+
+            let events = new Set(["ArrowUp", "ArrowDown"]);
+            document.onkeyup = function(e) {
+                console.log("keyup", e.key);
+                if (!events.has(e.key)) return;
+
+                console.log("handling zoom event");
+                if (e.key == "ArrowUp") {
+                    zoom_factor -= 0.2;
+                }
+                else if (e.key == "ArrowDown") {
+                    zoom_factor += 0.2;
+                }
+            };
         }
     </script>
   </head>
